@@ -1,0 +1,13 @@
+opencv-python
+opencv-contrib-python
+mediapipe
+numpy
+pandas
+joblib
+lightgbm
+scikit-learn
+twilio
+pygame
+python-dotenv
+features
+detector

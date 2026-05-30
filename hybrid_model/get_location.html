@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Get Location</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #0f172a;
+      color: white;
+    }
+    button {
+      font-size: 18px;
+      padding: 12px 20px;
+      cursor: pointer;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+    }
+    pre {
+      margin-top: 20px;
+      background: #111827;
+      padding: 15px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h2>Capture Current Location</h2>
+  <button onclick="getLocation()">Get Current Location</button>
+  <pre id="output">No location captured yet.</pre>
+
+  <script>
+    function getLocation() {
+      if (!navigator.geolocation) {
+        document.getElementById("output").textContent = "Geolocation not supported.";
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          const acc = pos.coords.accuracy;
+
+          const result = {
+            city: "Browser Detected",
+            region: "",
+            country: "India",
+            coordinates: `${lat},${lon}`,
+            accuracy_meters: acc,
+            map_link: `https://www.google.com/maps?q=${lat},${lon}`
+          };
+
+          document.getElementById("output").textContent = JSON.stringify(result, null, 2);
+
+          // download as location.json
+          const blob = new Blob([JSON.stringify(result, null, 2)], { type: "application/json" });
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "location.json";
+          a.click();
+        },
+        (err) => {
+          document.getElementById("output").textContent = "Location error: " + err.message;
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      );
+    }
+  </script>
+</body>
+</html>
